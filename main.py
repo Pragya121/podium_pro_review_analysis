@@ -1,9 +1,11 @@
+import os
+os.environ['TRANSFORMERS_CACHE'] = '/tmp/cache'
 import functions_framework
 from transformers import pipeline
 import pandas as pd
 import nltk
-
-nltk.download(["stopwords"])
+nltk.download(["stopwords","state_union","porter_test","punkt","averaged_perceptron_tagger"], download_dir='/tmp/nltk')
+nltk.data.path.append('/tmp/nltk')
 from nltk.stem.porter import PorterStemmer
 # library to clean data
 import re
@@ -92,15 +94,15 @@ def reviews_analysis_v1(request):
      except Exception:
         print("error in sentiment analysis")
         return "Error in sentiment analysis", 500
-    print("***************Pros:************** ")
-    print(pros)
+  
+    
     for review in pros:
          result = filter(review)
          pros_word_cloud.append(result)
     print(pros_word_cloud)
-    print("***************************************")
-    print("*************Cons*****************")
-    print(cons)
+    # print("***************************************")
+    # print("*************Cons*****************")
+    # print(cons)
     for review in cons:
         result = filter(review)
         cons_word_cloud.append(result)
@@ -110,6 +112,8 @@ def reviews_analysis_v1(request):
         result = filter(review)
         neutral_word_cloud.append(result)
     print(neutral_word_cloud)
+
+   
     final_pros_result = list(dict.fromkeys(pros_word_cloud))
     final_neutral_result = list(dict.fromkeys(neutral_word_cloud))
     final_cons_result = list(dict.fromkeys(cons_word_cloud))
